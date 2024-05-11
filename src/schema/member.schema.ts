@@ -8,6 +8,12 @@ export class Member extends Document {
 
   @Prop({ required: true })
   name: string;
+  
+  @Prop({ default: 0 })
+  booksBorrowed: number;
+
+  @Prop()
+  penaltyUntil: Date;
 }
 
 export const MemberSchema = SchemaFactory.createForClass(Member);

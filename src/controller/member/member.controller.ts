@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, HttpCode, HttpStatus } from '@nestjs/common';
 import { MemberService } from '../../service/member/member.service';
-import { Member } from '../../model/member.model';
+import { MMember } from '../../model/member.model';
 
 @Controller('members')
 export class MemberController {
@@ -9,13 +9,13 @@ export class MemberController {
   ) {}
 
   @Get()
-  async getAllmembers(): Promise<Member[]> {
+  async getAllmembers(): Promise<MMember[]> {
     const members = await this.memberService.findAll();
     return members;
   }
 
   @Get(':memberCode')
-    async getMemberByCode(@Param('memberCode') memberCode: string): Promise<Member> {
+    async getMemberByCode(@Param('memberCode') memberCode: string): Promise<MMember> {
       const member = await this.memberService.findByCode(memberCode);
       if (!member) {
           throw new NotFoundException('Member not found');
@@ -24,7 +24,9 @@ export class MemberController {
     }
 
   @Post()
-  async createMember(@Body() member: Member): Promise<Member> {
+  async createMember(
+    @Body() member: MMember
+  ): Promise<MMember> {
     return this.memberService.create(member);
   }
 
@@ -32,7 +34,7 @@ export class MemberController {
     async updateMember(
         @Param('memberCode') memberCode: string,
         @Body('name') name: string 
-    ): Promise<Member> {
+    ): Promise<MMember> {
         const updatedMember = await this.memberService.update(memberCode, name);
         if (!updatedMember) {
             throw new NotFoundException(`Member with code ${memberCode} not found`);
@@ -42,7 +44,7 @@ export class MemberController {
 
   @Delete(':memberCode')
   @HttpCode(HttpStatus.OK)
-  async deleteUser(@Param('memberCode') memberCode: string): Promise<Member> {
+  async deleteUser(@Param('memberCode') memberCode: string): Promise<MMember> {
     const member = await this.memberService.delete(memberCode);
     if (!member) {
       throw new NotFoundException('User not found');
