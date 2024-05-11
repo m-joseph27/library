@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Member } from './member.schema';
+import { MMember } from './member.schema';
 import { MBook } from './book.schema';
 
 @Schema()
@@ -9,7 +9,7 @@ export class MTransaction extends Document {
   id?: string;
 
   @Prop({ type: Types.ObjectId, ref: 'Member' })
-  member: Member;
+  member: MMember;
 
   @Prop({ type: Types.ObjectId, ref: 'Book' })
   book: MBook;
