@@ -29,5 +29,5 @@ export class MemberService {
 
   async delete(memberCode: string): Promise<Member> {
     return this.memberModel.findOneAndDelete({ code: memberCode }).exec();
-}
+  }
 }

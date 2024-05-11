@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, HttpCode, HttpStatus } from '@nestjs/common';
-import { MemberService } from '../../service/member/member.service';
-import { MMember } from '../../model/member.model';
+import { MemberService } from '../service/member.service';
+import { MMember } from '../model/member.model';
 
 @Controller('members')
 export class MemberController {
@@ -37,7 +37,7 @@ export class MemberController {
     ): Promise<MMember> {
         const updatedMember = await this.memberService.update(memberCode, name);
         if (!updatedMember) {
-            throw new NotFoundException(`Member with code ${memberCode} not found`);
+          throw new NotFoundException(`Member with code ${memberCode} not found`);
         }
         return updatedMember;
     }
