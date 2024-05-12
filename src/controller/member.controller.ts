@@ -76,4 +76,32 @@ export class MemberController {
     }
     return response;
   }
+
+  @Post('borrow')
+  async borrowBook(@Body() borrowData: { memberCode: string; bookCode: string }) {
+    try {
+      const result = await this.memberService.borrowingBook(borrowData.memberCode, borrowData.bookCode);
+      return {
+        success: true,
+        message: 'Book successfully borrowed',
+        data: result
+      };
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
+
+  @Post('return')
+  async returnBook(@Body() returnData: { memberCode: string; bookCode: string }) {
+    try {
+      const result = await this.memberService.returningBook(returnData.memberCode, returnData.bookCode);
+      return {
+        success: true,
+        message: 'Book successfully returned',
+        data: result
+      };
+    } catch (error) {
+        throw new NotFoundException(error.message);
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MBook } from 'src/schema/book.schema';
@@ -34,5 +34,18 @@ export class BookService {
 
   async delete(code: string): Promise<MBook> {
     return this.bookModel.findOneAndDelete({ code: code }).exec();
+  }
+
+  async updateBookStatus(code: string, isBorrowed: boolean): Promise<MBook> {
+    const updatedBook = await this.bookModel.findOneAndUpdate(
+      { code }, 
+      { $set: { isBorrowed } }, 
+      { new: true }
+    ).exec();
+    if (!this.update) {
+      throw new NotFoundException(`Book with code ${code} not found`);
+    }
+  
+    return updatedBook;
   }
 }

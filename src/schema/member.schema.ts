@@ -8,12 +8,16 @@ export class MMember extends Document {
 
   @Prop({ required: true })
   name: string;
-  
-  @Prop({ default: 0 })
-  booksBorrowed: number;
+
 
   @Prop()
   penaltyUntil: Date;
+
+  @Prop()
+  penalty: boolean
+
+  @Prop({ type: [String], default: [] })
+  booksBorrowed: string[];
 }
 
 export const MemberSchema = SchemaFactory.createForClass(MMember);
