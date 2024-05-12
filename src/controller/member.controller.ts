@@ -63,7 +63,6 @@ export class MemberController {
     }
 
   @Delete(':memberCode')
-  @HttpCode(HttpStatus.OK)
   async deleteUser(@Param('memberCode') memberCode: string): Promise<MemberResponse> {
     const member = await this.memberService.delete(memberCode);
     const response: MemberResponse = {
