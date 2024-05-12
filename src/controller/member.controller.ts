@@ -2,6 +2,11 @@ import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, Htt
 import { MemberService } from '../service/member.service';
 import { MMember } from '../schema/member.schema';
 
+interface MemberResponse {
+  success: boolean;
+  message: string;
+  data: MMember;
+}
 @Controller('members')
 export class MemberController {
   constructor(
@@ -9,18 +14,28 @@ export class MemberController {
   ) {}
 
   @Get()
-  async getAllmembers(): Promise<MMember[]> {
+  async getAllmembers(): Promise<MemberResponse> {
     const members = await this.memberService.findAll();
-    return members;
+    const response: MemberResponse = {
+      success: true,
+      message: 'Successfully retrieved all member',
+      data: members,
+    }
+    return response;
   }
 
   @Get(':memberCode')
-    async getMemberByCode(@Param('memberCode') memberCode: string): Promise<MMember> {
+    async getMemberByCode(@Param('memberCode') memberCode: string): Promise<MemberResponse> {
       const member = await this.memberService.findByCode(memberCode);
+      const response: MemberResponse = {
+        success: true,
+        message: `Successfully retrieved member with code ${memberCode}`,
+        data: member,
+      }
       if (!member) {
           throw new NotFoundException('Member not found');
       }
-      return member;
+      return response;
     }
 
   @Post()
@@ -34,21 +49,31 @@ export class MemberController {
     async updateMember(
         @Param('memberCode') memberCode: string,
         @Body('name') name: string 
-    ): Promise<MMember> {
+    ): Promise<MemberResponse> {
         const updatedMember = await this.memberService.update(memberCode, name);
+        const response: MemberResponse = {
+          success: true,
+          message: `Successfully update member with code ${memberCode}`,
+          data: updatedMember,
+        }
         if (!updatedMember) {
           throw new NotFoundException(`Member with code ${memberCode} not found`);
         }
-        return updatedMember;
+        return response;
     }
 
   @Delete(':memberCode')
   @HttpCode(HttpStatus.OK)
-  async deleteUser(@Param('memberCode') memberCode: string): Promise<MMember> {
+  async deleteUser(@Param('memberCode') memberCode: string): Promise<MemberResponse> {
     const member = await this.memberService.delete(memberCode);
+    const response: MemberResponse = {
+      success: true,
+      message: `Successfully delete member with code ${memberCode}`,
+      data: member,
+    }
     if (!member) {
       throw new NotFoundException('User not found');
     }
-    return member;
+    return response;
   }
 }
